@@ -1,16 +1,47 @@
 #include "raylib.h"
 
-int main(void) {
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+#define Rectangle Rectangle_win32
+#define CloseWindow CloseWindow_win32
+#define ShowCursor ShowCursor_win32
 
-    InitWindow(screenWidth, screenHeight, "My Game");
+#include <windows.h>
+
+#undef Rectangle
+#undef CloseWindow
+#undef ShowCursor
+
+int main(void) {
+    SetConfigFlags(FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_UNDECORATED | FLAG_WINDOW_TOPMOST);
+    InitWindow(800, 450, "Love Virus");
+
+    // Ask Windows for the usable desktop area (excludes taskbar)
+    RECT workArea;
+    SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0);
+    int screenWidth  = workArea.right - workArea.left;
+    int screenHeight = workArea.bottom - workArea.top;
+
+    SetWindowSize(screenWidth, screenHeight);
+    SetWindowPosition(workArea.left, workArea.top);
+
     SetTargetFPS(60);
 
+    Rectangle square = { 100, 100, 50, 50 };
+    Vector2 velocity = { 4.0f, 3.0f };
+
     while (!WindowShouldClose()) {
+        square.x += velocity.x;
+        square.y += velocity.y;
+
+        if (square.x <= 0 || square.x + square.width >= screenWidth) {
+            velocity.x *= -1;
+        }
+        if (square.y <= 0 || square.y + square.height >= screenHeight) {
+            velocity.y *= -1;
+        }
+
         BeginDrawing();
-            ClearBackground(RAYWHITE);
-            DrawText("It works!", 190, 200, 20, DARKGRAY);
+            ClearBackground(BLANK);
+            DrawRectangleRec(square, RED);
         EndDrawing();
     }
 

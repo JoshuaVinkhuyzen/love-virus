@@ -1,7 +1,7 @@
 CC = gcc
 SRC = src/main.c
 OUT = game.exe
-LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
+LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm -luser32
 
 build:
 	$(CC) $(SRC) -o $(OUT) $(LIBS)
