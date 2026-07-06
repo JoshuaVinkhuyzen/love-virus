@@ -9,3 +9,11 @@ void GetDesktopWorkArea(int *x, int *y, int *width, int *height) {
     *width  = workArea.right  - workArea.left;
     *height = workArea.bottom - workArea.top;
 }
+
+void GetCursorPositionInWindow(void *windowHandle, int *x, int *y) {
+    POINT p;
+    GetCursorPos(&p);                        // absolute screen position
+    ScreenToClient((HWND)windowHandle, &p);  // convert to window-local
+    *x = p.x;
+    *y = p.y;
+}
