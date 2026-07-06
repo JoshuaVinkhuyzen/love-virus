@@ -1,5 +1,5 @@
 CC = gcc
-SRC = src/main.c
+SRC = src/main.c src/win32_helper.c
 OUT = game.exe
 LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm -luser32
 

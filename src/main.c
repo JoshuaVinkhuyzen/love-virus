@@ -1,27 +1,15 @@
 #include "raylib.h"
-
-#define Rectangle Rectangle_win32
-#define CloseWindow CloseWindow_win32
-#define ShowCursor ShowCursor_win32
-
-#include <windows.h>
-
-#undef Rectangle
-#undef CloseWindow
-#undef ShowCursor
+#include "win32_helper.h"
 
 int main(void) {
     SetConfigFlags(FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_UNDECORATED | FLAG_WINDOW_TOPMOST);
     InitWindow(800, 450, "Love Virus");
 
-    // Ask Windows for the usable desktop area (excludes taskbar)
-    RECT workArea;
-    SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0);
-    int screenWidth  = workArea.right - workArea.left;
-    int screenHeight = workArea.bottom - workArea.top;
+    int posX, posY, screenWidth, screenHeight;
+    GetDesktopWorkArea(&posX, &posY, &screenWidth, &screenHeight);
 
     SetWindowSize(screenWidth, screenHeight);
-    SetWindowPosition(workArea.left, workArea.top);
+    SetWindowPosition(posX, posY);
 
     SetTargetFPS(60);
 
