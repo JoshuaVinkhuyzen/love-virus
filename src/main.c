@@ -50,6 +50,31 @@ int main(void) {
                 squares[i].velocity.y *= -1;
         }
 
+        for (int i = 0; i < squareCount; i++) {
+            for (int j = i + 1; j < squareCount; j++) {
+                if (CheckCollisionRecs(squares[i].rect, squares[j].rect)) {
+                    Vector2 temp = squares[i].velocity;
+                    squares[i].velocity = squares[j].velocity;
+                    squares[j].velocity = temp;
+
+                    float overlapX = fminf(squares[i].rect.x + squares[i].rect.width, squares[j].rect.x + squares[j].rect.width)
+                                    - fmaxf(squares[i].rect.x, squares[j].rect.x);
+                    float overlapY = fminf(squares[i].rect.y + squares[i].rect.height, squares[j].rect.y + squares[j].rect.height)
+                                    - fmaxf(squares[i].rect.y, squares[j].rect.y);
+
+                    if (overlapX < overlapY) {
+                        float push = overlapX / 2.0f;
+                        if (squares[i].rect.x < squares[j].rect.x) { squares[i].rect.x -= push; squares[j].rect.x += push; }
+                        else                                       { squares[i].rect.x += push; squares[j].rect.x -= push; }
+                    } else {
+                        float push = overlapY / 2.0f;
+                        if (squares[i].rect.y < squares[j].rect.y) { squares[i].rect.y -= push; squares[j].rect.y += push; }
+                        else                                       { squares[i].rect.y += push; squares[j].rect.y -= push; }
+                    }
+                }
+            }
+        }
+
         int mouseX, mouseY;
         GetCursorPositionInWindow(windowHandle, &mouseX, &mouseY);
         Vector2 cursor = { (float)mouseX, (float)mouseY };
