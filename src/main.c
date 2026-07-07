@@ -4,8 +4,9 @@
 #include <time.h>
 
 #define MAX_SQUARES 64
-#define MAX_SOUNDS 32
 #define SQUARE_SIZE 100
+#define MAX_SOUNDS 32
+#define ALIASES_PER_SOUND 4
 
 typedef struct {
     Rectangle rect;
@@ -39,11 +40,16 @@ int main(void) {
     Rectangle heartSource = { 0, 0, (float)heartTexture.width, (float)heartTexture.height };
 
     InitAudioDevice();
-    Sound sounds[MAX_SOUNDS];
+    Sound baseSounds[MAX_SOUNDS];
+    Sound soundAliases[MAX_SOUNDS][ALIASES_PER_SOUND];
+    int nextAlias[MAX_SOUNDS] = { 0 };
     int soundCount = 0;
     FilePathList soundFiles = LoadDirectoryFilesEx("assets/sounds", ".mp3", false);
     for (unsigned int i = 0; i < soundFiles.count && soundCount < MAX_SOUNDS; i++) {
-        sounds[soundCount] = LoadSound(soundFiles.paths[i]);
+        baseSounds[soundCount] = LoadSound(soundFiles.paths[i]);
+        for (int a = 0; a < ALIASES_PER_SOUND; a++) {
+            soundAliases[soundCount][a] = LoadSoundAlias(baseSounds[soundCount]);
+        }
         soundCount++;
     }
     UnloadDirectoryFiles(soundFiles);
@@ -113,7 +119,8 @@ int main(void) {
 
             if (soundCount > 0) {
                 int randomSound = GetRandomValue(0, soundCount - 1);
-                PlaySound(sounds[randomSound]);
+                PlaySound(soundAliases[randomSound][nextAlias[randomSound]]);
+                nextAlias[randomSound] = (nextAlias[randomSound] + 1) % ALIASES_PER_SOUND;
             }
         }
 
@@ -126,7 +133,10 @@ int main(void) {
     }
 
     for (int i = 0; i < soundCount; i++) {
-        UnloadSound(sounds[i]);
+        for (int a = 0; a < ALIASES_PER_SOUND; a++) {
+            UnloadSoundAlias(soundAliases[i][a]);
+        }
+        UnloadSound(baseSounds[i]);
     }
     CloseAudioDevice();
     UnloadTexture(heartTexture);
