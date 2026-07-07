@@ -4,6 +4,7 @@
 #include <time.h>
 
 #define MAX_SQUARES 64
+#define MAX_SOUNDS 32
 #define SQUARE_SIZE 100
 
 typedef struct {
@@ -36,6 +37,16 @@ int main(void) {
     Texture2D heartTexture = LoadTexture("assets/sprites/heart.png");
     SetTextureFilter(heartTexture, TEXTURE_FILTER_POINT);
     Rectangle heartSource = { 0, 0, (float)heartTexture.width, (float)heartTexture.height };
+
+    InitAudioDevice();
+    Sound sounds[MAX_SOUNDS];
+    int soundCount = 0;
+    FilePathList soundFiles = LoadDirectoryFilesEx("assets/sounds", ".mp3", false);
+    for (unsigned int i = 0; i < soundFiles.count && soundCount < MAX_SOUNDS; i++) {
+        sounds[soundCount] = LoadSound(soundFiles.paths[i]);
+        soundCount++;
+    }
+    UnloadDirectoryFiles(soundFiles);
 
     BouncingSquare squares[MAX_SQUARES];
     int squareCount = 1;
@@ -99,6 +110,11 @@ int main(void) {
             squareCount++;
 
             squares[hoveredIndex].velocity = RandomVelocity();
+
+            if (soundCount > 0) {
+                int randomSound = GetRandomValue(0, soundCount - 1);
+                PlaySound(sounds[randomSound]);
+            }
         }
 
         BeginDrawing();
@@ -109,6 +125,10 @@ int main(void) {
         EndDrawing();
     }
 
+    for (int i = 0; i < soundCount; i++) {
+        UnloadSound(sounds[i]);
+    }
+    CloseAudioDevice();
     UnloadTexture(heartTexture);
     CloseWindow();
     return 0;
