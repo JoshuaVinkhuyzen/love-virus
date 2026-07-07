@@ -1,7 +1,7 @@
 """
 generate_heart.py
 
-Procedurally generates the pixel-art heart sprite used by the game
+Procedurally generates the pixel-art heart sprite used by the program
 (assets/sprites/heart.png), using a mathematical heart curve rather than
 hand-placed pixels, so the shape stays correctly proportioned at any size.
 
