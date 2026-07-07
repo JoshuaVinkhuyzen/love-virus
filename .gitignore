@@ -1,2 +1,6 @@
 *.exe
 *.o
+
+assets/sounds/*
+!assets/sounds/.gitkeep
+!assets/sounds/default.mp3
