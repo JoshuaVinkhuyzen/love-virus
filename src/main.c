@@ -4,7 +4,7 @@
 #include <time.h>
 
 #define MAX_SQUARES 64
-#define SQUARE_SIZE 50
+#define SQUARE_SIZE 100
 
 typedef struct {
     Rectangle rect;
@@ -31,8 +31,11 @@ int main(void) {
     SetWindowPosition(posX, posY);
 
     void *windowHandle = GetWindowHandle();
-
     SetTargetFPS(60);
+
+    Texture2D heartTexture = LoadTexture("assets/sprites/heart.png");
+    SetTextureFilter(heartTexture, TEXTURE_FILTER_POINT);
+    Rectangle heartSource = { 0, 0, (float)heartTexture.width, (float)heartTexture.height };
 
     BouncingSquare squares[MAX_SQUARES];
     int squareCount = 1;
@@ -101,11 +104,12 @@ int main(void) {
         BeginDrawing();
             ClearBackground(BLANK);
             for (int i = 0; i < squareCount; i++) {
-                DrawRectangleRec(squares[i].rect, RED);
+                DrawTexturePro(heartTexture, heartSource, squares[i].rect, (Vector2){0,0}, 0.0f, WHITE);
             }
         EndDrawing();
     }
 
+    UnloadTexture(heartTexture);
     CloseWindow();
     return 0;
 }
