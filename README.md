@@ -2,6 +2,8 @@
 
 A playful little heart that lives on your desktop — click it to split it into two, watch them bounce and collide, and hear a random sound each time.
 
+![Demo](LoveVirusGIF.gif)
+
 ## Features
 - Transparent, click-through desktop overlay — only the heart itself
   blocks clicks; everywhere else, clicks and keystrokes pass through to
