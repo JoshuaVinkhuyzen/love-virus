@@ -81,3 +81,6 @@ draw.text((text_x, text_y), text, font=font, fill=(255,255,255,255))
 
 img.save("assets/sprites/heart.png")
 print(f"Saved {IMG_W}x{IMG_H} image")
+
+icon_sizes = [(16,16), (32,32), (48,48), (256,256)]
+img.save("heart.ico", format="ICO", sizes=icon_sizes)

@@ -1,6 +1,6 @@
 #include <winver.h>
 
-IDI_ICON1 ICON "heart.ico"
+GLFW_ICON ICON "heart.ico"
 
 1 VERSIONINFO
 FILEVERSION 1,0,0,0
