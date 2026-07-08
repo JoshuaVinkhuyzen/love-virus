@@ -1,3 +1,5 @@
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+
 # Love Virus
 
 A playful little heart that lives on your desktop — click it to split it into two, watch them bounce and collide, and hear a random sound each time.
