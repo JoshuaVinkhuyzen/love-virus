@@ -64,10 +64,30 @@ int main(void) {
             squares[i].rect.x += squares[i].velocity.x;
             squares[i].rect.y += squares[i].velocity.y;
 
-            if (squares[i].rect.x <= 0 || squares[i].rect.x + squares[i].rect.width >= screenWidth)
+            if (squares[i].rect.x <= 0) {
+                squares[i].rect.x = 0;
                 squares[i].velocity.x *= -1;
-            if (squares[i].rect.y <= 0 || squares[i].rect.y + squares[i].rect.height >= screenHeight)
+            } else if (squares[i].rect.x + squares[i].rect.width >= screenWidth) {
+                squares[i].rect.x = screenWidth - squares[i].rect.width;
+                squares[i].velocity.x *= -1;
+            }
+
+            if (squares[i].rect.y <= 0) {
+                squares[i].rect.y = 0;
                 squares[i].velocity.y *= -1;
+            } else if (squares[i].rect.y + squares[i].rect.height >= screenHeight) {
+                squares[i].rect.y = screenHeight - squares[i].rect.height;
+                squares[i].velocity.y *= -1;
+            }
+        }
+
+        // Keep every square fully on-screen, even if the collision-separation
+        // step above just nudged one past an edge.
+        for (int i = 0; i < squareCount; i++) {
+            if (squares[i].rect.x < 0) squares[i].rect.x = 0;
+            if (squares[i].rect.x + squares[i].rect.width > screenWidth) squares[i].rect.x = screenWidth - squares[i].rect.width;
+            if (squares[i].rect.y < 0) squares[i].rect.y = 0;
+            if (squares[i].rect.y + squares[i].rect.height > screenHeight) squares[i].rect.y = screenHeight - squares[i].rect.height;
         }
 
         for (int i = 0; i < squareCount; i++) {
