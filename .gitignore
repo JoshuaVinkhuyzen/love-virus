@@ -1,5 +1,6 @@
 *.exe
 *.o
+*.ddl
 
 assets/sounds/*
 !assets/sounds/.gitkeep

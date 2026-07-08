@@ -11,7 +11,7 @@ run: build
 	./$(OUT)
 
 release: $(RES_OBJ)
-	$(CC) $(SRC) $(RES_OBJ) -o $(OUT) -static $(LIBS) -mwindows
+	$(CC) $(SRC) $(RES_OBJ) -o $(OUT) $(LIBS) -mwindows
 
 $(RES_OBJ): resource.rc heart.ico
 	windres resource.rc -O coff -o $(RES_OBJ)
